@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Você ❤️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --deep: #0a0710;
+    --mid: #130f1e;
+    --rose: #c8536a;
+    --gold: #d4a96a;
+    --cream: #f5ede3;
+    --glow: rgba(200, 83, 106, 0.18);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--deep);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Stars canvas ── */
+  #stars {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Floating petals ── */
+  .petal {
+    position: fixed;
+    width: 10px; height: 14px;
+    background: radial-gradient(ellipse at 40% 40%, #e8a0aa, #c8536a88);
+    border-radius: 80% 0 80% 0;
+    pointer-events: none;
+    z-index: 1;
+    animation: fall linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes fall {
+    0%   { transform: translateY(-40px) rotate(0deg) translateX(0); opacity: 0; }
+    5%   { opacity: 0.7; }
+    90%  { opacity: 0.5; }
+    100% { transform: translateY(110vh) rotate(720deg) translateX(60px); opacity: 0; }
+  }
+
+  /* ── Page wrapper ── */
+  .page {
+    position: relative; z-index: 2;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 1.2s ease forwards 0.3s;
+  }
+
+  .for-you {
+    font-family: 'Pinyon Script', cursive;
+    font-size: clamp(58px, 14vw, 88px);
+    color: var(--rose);
+    text-shadow: 0 0 40px rgba(200,83,106,0.5), 0 0 80px rgba(200,83,106,0.2);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto 48px;
+    opacity: 0;
+    animation: fadeUp 1.2s ease forwards 0.6s;
+  }
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    opacity: 0.4;
+  }
+  .divider-heart { font-size: 16px; color: var(--rose); }
+
+  /* ── Video frame ── */
+  .video-wrapper {
+    width: 100%;
+    max-width: 340px;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 1.4s ease forwards 0.9s;
+    margin-bottom: 56px;
+  }
+
+  .video-glow {
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(ellipse at center, rgba(200,83,106,0.22) 0%, transparent 70%);
+    pointer-events: none;
+    border-radius: 24px;
+  }
+
+  .video-border {
+    position: relative;
+    border-radius: 18px;
+    padding: 6px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--rose) 50%, #7c3d6e 100%);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(200,83,106,0.2);
+  }
+
+  .video-border iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 9/16;
+    border-radius: 13px;
+    border: none;
+  }
+
+  /* ── Message ── */
+  .message-card {
+    width: 100%;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 1.4s ease forwards 1.2s;
+    margin-bottom: 48px;
+  }
+
+  .message-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(212,169,106,0.3), rgba(200,83,106,0.2), rgba(124,61,110,0.2));
+    pointer-events: none;
+  }
+
+  .message-inner {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 40px 36px;
+    border: 1px solid rgba(212,169,106,0.15);
+    position: relative;
+  }
+
+  .quote-mark {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 120px;
+    color: var(--rose);
+    opacity: 0.12;
+    position: absolute;
+    top: -10px; left: 16px;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .message-text {
+    font-size: clamp(17px, 3.2vw, 20px);
+    line-height: 1.85;
+    color: var(--cream);
+    font-weight: 300;
+    font-style: italic;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .message-text p + p { margin-top: 18px; }
+
+  .message-text .highlight {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  /* ── Signature ── */
+  .signature {
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 1.4s ease forwards 1.5s;
+  }
+
+  .love-sign {
+    font-family: 'Pinyon Script', cursive;
+    font-size: clamp(38px, 9vw, 52px);
+    color: var(--rose);
+    text-shadow: 0 0 30px rgba(200,83,106,0.4);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .hearts-row {
+    font-size: 20px;
+    letter-spacing: 8px;
+    animation: pulse-hearts 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-hearts {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50%       { opacity: 1;   transform: scale(1.08); }
+  }
+
+  /* ── TELA DE ENTRADA ── */
+  .entrada {
+    position: fixed; inset: 0; z-index: 999;
+    background: var(--deep);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 28px; text-align: center; padding: 32px;
+    transition: opacity 1s ease, visibility 1s ease;
+  }
+  .entrada.saindo { opacity: 0; visibility: hidden; }
+  .entrada-titulo {
+    font-family: 'Pinyon Script', cursive;
+    font-size: clamp(52px, 14vw, 88px);
+    color: var(--rose);
+    text-shadow: 0 0 40px rgba(200,83,106,0.5);
+    line-height: 1.1;
+  }
+  .entrada-sub {
+    font-size: 15px; font-weight: 300; font-style: italic;
+    color: var(--cream); opacity: 0.7; letter-spacing: 1px;
+  }
+  .btn-entrar {
+    margin-top: 12px;
+    padding: 14px 40px;
+    background: linear-gradient(135deg, var(--rose), #7c3d6e);
+    color: var(--cream); font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-style: italic; font-weight: 400;
+    border: none; border-radius: 50px; cursor: pointer;
+    box-shadow: 0 8px 32px rgba(200,83,106,0.35);
+    transition: transform .2s, box-shadow .2s;
+    letter-spacing: 1px;
+  }
+  .btn-entrar:hover { transform: scale(1.05); box-shadow: 0 12px 40px rgba(200,83,106,0.5); }
+  .entrada-heart { font-size: 36px; animation: pulse-hearts 2s ease-in-out infinite; }
+
+  /* ── BOTÃO MÚSICA ── */
+  .music-btn {
+    position: fixed; bottom: 24px; right: 24px; z-index: 50;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: rgba(200,83,106,0.85); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; font-size: 20px; cursor: pointer;
+    display: none; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(200,83,106,0.4);
+    transition: transform .2s;
+  }
+  .music-btn:hover { transform: scale(1.1); }
+  .music-btn.visivel { display: flex; }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    .message-inner { padding: 28px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<!-- ── TELA DE ENTRADA ── -->
+<div class="entrada" id="entrada">
+  <div class="entrada-heart">🌹</div>
+  <div class="entrada-titulo">Para Rílary</div>
+  <div class="entrada-sub">Tem uma surpresa esperando por você...</div>
+  <button class="btn-entrar" onclick="abrirSurpresa()">Abrir minha surpresa ❤️</button>
+</div>
+
+<!-- ── PLAYER YOUTUBE OCULTO ── -->
+<div id="yt-player" style="position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;"></div>
+
+<!-- ── BOTÃO PAUSAR/RETOMAR ── -->
+<button class="music-btn" id="musicBtn" onclick="toggleMusica()" title="Pausar/Retomar música">🎵</button>
+
+<!-- Floating petals -->
+<script>
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = (Math.random() * 14) + 's';
+    p.style.transform = 'scale(' + (0.5 + Math.random() * 1.2) + ')';
+    document.body.appendChild(p);
+  }
+</script>
+
+<div class="page">
+
+  <header class="header">
+    <div class="for-you">Para Rílary</div>
+    <div class="subtitle">Com Todo o meu amor</div>
+  </header>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-heart">✦</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="video-wrapper">
+    <div class="video-glow"></div>
+    <div class="video-border">
+      <iframe
+        src="https://www.youtube.com/embed/5d-B8-10oVg?rel=0&modestbranding=1"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        title="Surpresa para você">
+      </iframe>
+    </div>
+    <p style="text-align:center;font-size:13px;letter-spacing:2px;color:var(--gold);opacity:0.75;margin-top:14px;font-style:italic;">Tem mais aqui abaixo ↓</p>
+  </div>
+
+  <div class="message-card">
+    <div class="message-inner">
+      <span class="quote-mark">"</span>
+      <div class="message-text">
+        <p>Fiz essa pequena lembrança, pra você sempre saber que<br>
+          <span class="highlight">eu te amo mais que tudo</span>, e que pra te ver feliz<br>
+          eu sou capaz de fazer as maiores loucuras.</p>
+        <p>Quando eu vejo seu sorriso, meu mundo que é<br>
+          preto e branco se enche de cores e de luz.</p>
+        <p>Seu cheiro é como uma brisa suave em um dia de sol,<br>
+          de frente há um rio de águas claras.</p>
+        <p>Estar com você é contemplar as estrelas mesmo estando na terra,<br>
+          e o seu beijo é o <span class="highlight">doce mais belo</span> que uma flor poderia produzir.</p>
+        <p>Receba essa rosa e este bombom que você adora, pra você sempre lembrar que<br>
+          <span class="highlight">estar ao seu lado é tão lindo e tão doce</span> quanto esses presentes.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="signature">
+    <span class="love-sign">Te amo, do fundo do meu coração!</span>
+    <div class="hearts-row">❤️ ❤️ ❤️</div>
+  </div>
+
+</div>
+
+<!-- Stars -->
+<script>
+  // ── YouTube IFrame API ──
+  var ytPlayer;
+  var tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+
+  function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player('yt-player', {
+      videoId: 'k6CfbvVDoxs',
+      playerVars: {
+        autoplay: 0, controls: 0, loop: 1,
+        playlist: 'k6CfbvVDoxs',
+        modestbranding: 1, rel: 0
+      },
+      events: { onReady: function() {} }
+    });
+  }
+
+  function abrirSurpresa() {
+    document.getElementById('entrada').classList.add('saindo');
+    setTimeout(() => {
+      document.getElementById('entrada').style.display = 'none';
+      document.getElementById('musicBtn').classList.add('visivel');
+      if (ytPlayer && ytPlayer.playVideo) {
+        ytPlayer.setVolume(60);
+        ytPlayer.playVideo();
+      }
+    }, 1000);
+  }
+
+  var tocando = true;
+  function toggleMusica() {
+    if (!ytPlayer) return;
+    if (tocando) {
+      ytPlayer.pauseVideo();
+      document.getElementById('musicBtn').textContent = '🔇';
+    } else {
+      ytPlayer.playVideo();
+      document.getElementById('musicBtn').textContent = '🎵';
+    }
+    tocando = !tocando;
+  }
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', () => { resize(); initStars(); });
+
+  function initStars() {
+    stars = Array.from({ length: 180 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.4 + 0.2,
+      a: Math.random(),
+      speed: 0.002 + Math.random() * 0.004,
+      phase: Math.random() * Math.PI * 2
+    }));
+  }
+  initStars();
+
+  function drawStars(t) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      const alpha = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(245, 237, 227, ${alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+  }
+  requestAnimationFrame(drawStars);
+</script>
+
+</body>
+</html>
